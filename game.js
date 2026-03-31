@@ -76,6 +76,7 @@ function update() {
             console.log("Final Score:", score(xPos, yPos));
             gameState = "done";
             const scoreValue = document.querySelector("#score-value");
+            alert("Score :" + score(xPos, yPos));
             scoreValue.innerHTML = "Score: " + score(xPos, yPos);
         }
     }
