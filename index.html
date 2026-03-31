@@ -5,17 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dart Game</title>
+    <!-- <link rel="stylesheet" href="index.css"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
     <div class="dartboard-div" style="display:none">
         <img class="dartboard" src="dartboard.png" alt="dartboard">
     </div>
-    <canvas id="gameCanvas">
-
-    </canvas>
-
+    <div class="score bg-red-500 p-2 text-white font-bold flex justify-between">
+        <div class="score-text">Dart Game</div>
+        <div class="score-value" id="score">Score: 0</div>
+    </div>
+    <div class="canvas-div">
+        <canvas id="gameCanvas">
+        </canvas>
+    </div>
 </body>
-<script src="game.js"></script>
+<script src="game.js" type="module"></script>
 
 </html>
