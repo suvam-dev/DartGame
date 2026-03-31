@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="gameCanvas"></canvas>
+</body>
+<script>
+    var xPos = 100;       //→ current position  
+    var direction = 1;  // → +1 or -1  
+    var speed = 1     //→ how fast it moves  
+    var leftLimit = 100;  // → left boundary  
+    var rightLimit = 100;  //→ right boundary  
+    var isLocked = false;   //→ true/false  
+
+    function update() {
+        if (!isLocked) {
+            xPos += direction * speed;
+
+            if (xPos >= rightLimit || xPos <= leftLimit) {
+                direction *= -1;  // reverse direction
+            }
+        }
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "red";
+        ctx.fillRect(xPos, 100, 20, 20);  // draw the moving square
+    }
+
+    function gameLoop() {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+
+</script>
+
+</html>
