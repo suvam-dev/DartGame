@@ -75,8 +75,8 @@ function update() {
             gameState = "shoot";
             console.log("Final Score:", score(xPos, yPos));
             gameState = "done";
-            const score = document.querySelector("#score-value");
-            score.innerHTML = "Score: " + score(xPos, yPos);
+            const scoreValue = document.querySelector("#score-value");
+            scoreValue.innerHTML = "Score: " + score(xPos, yPos);
         }
     }
 }
@@ -142,11 +142,11 @@ function score(dartx, darty) {
         angle += 360;
     }
     let slice = Math.floor(angle / 18);
-    console.log("slice:" + slice)
-    console.log("angle:" + angle)
-    console.log("distance:" + distance);
+    // console.log("slice:" + slice)
+    // console.log("angle:" + angle)
+    // console.log("distance:" + distance);
     let base = scoreboard[slice];
-    console.log("score :" + base)
+    // console.log("score :" + base)
     // triple ring
     if (r > 0.45 && r < 0.5) {
         return base * 3;
