@@ -75,6 +75,8 @@ function update() {
             gameState = "shoot";
             console.log("Final Score:", score(xPos, yPos));
             gameState = "done";
+            const score = document.querySelector("#score-value");
+            score.innerHTML = "Score: " + score(xPos, yPos);
         }
     }
 }
@@ -105,8 +107,11 @@ function gameLoop() {
 
     update();
     draw();
+    console.log("gameState:" + gameState);
     if (gameState === "shoot") {
-        document.querySelector("#score").innerHTML = score(xPos, yPos);
+        const score = document.querySelector("#score-value");
+        console.log("score 1:" + score(xPos, yPos));
+        score.innerHTML = "Score: " + score(xPos, yPos);
     }
     requestAnimationFrame(gameLoop);
 }

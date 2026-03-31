@@ -1,1 +1,10 @@
-@import "tailwindcss"
+.head {
+    background-color: yellowgreen;
+    color: white;
+    font-weight: bolder;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
