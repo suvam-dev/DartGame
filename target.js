@@ -1,4 +1,7 @@
-var scoreglobal = 0;
+let totalScore = 0;
+let movesLeft = 10;
+const targetScore = 150;
+
 function gameplay() {
     console.log("game loaded");
     //making the dart board 
@@ -28,20 +31,30 @@ function gameplay() {
     var topLimit = centerY - boardRadius;
     var bottomLimit = centerY + boardRadius;
     var isLockedY = false;
-    // red bar logic
 
-    console.log("Game Loaded");
-    console.log("Canvas:", can.width, can.height);
-    console.log("Center:", centerX, centerY);
-    console.log("Board Radius:", boardRadius);
-    console.log("X Limits:", leftLimit, rightLimit);
-    console.log("Y Limits:", topLimit, bottomLimit);
+    // UI Elements
+    const scoreValue = document.querySelector("#score-value");
+    const movesDisplay = document.querySelector("#moves");
+    const targetDisplay = document.querySelector(".target-score");
+
+    // Initialize UI
+    if (targetDisplay) targetDisplay.innerHTML = "Target-score: " + targetScore;
+    if (movesDisplay) movesDisplay.innerHTML = "Moves: " + movesLeft;
+    if (scoreValue) scoreValue.innerHTML = "Score: " + totalScore;
+
+    function resetThrow() {
+        xPos = centerX;
+        yPos = centerY;
+        isLockedX = false;
+        isLockedY = false;
+        gameState = "aimingX";
+    }
 
     function update() {
-        console.log("updating...");
+        if (gameState === "gameOver" || gameState === "waiting") return;
+
         if (gameState === "aimingX") {
             if (!isLockedX) {
-                console.log("xpos:" + xPos);
                 xPos += direction * speed;
 
                 if (xPos >= rightLimit) {
@@ -74,11 +87,29 @@ function gameplay() {
             }
             else {
                 gameState = "shoot";
-                console.log("Final Score:", score(xPos, yPos));
-                gameState = "done";
-                scoreglobal += score(xPos, yPos);
-                const scoreValue = document.querySelector("#score-value");
-                scoreValue.innerHTML = "Score: " + score(xPos, yPos);
+                const currentThrowScore = score(xPos, yPos);
+                totalScore += currentThrowScore;
+                movesLeft--;
+
+                // Update UI
+                if (scoreValue) scoreValue.innerHTML = "Score: " + totalScore;
+                if (movesDisplay) movesDisplay.innerHTML = "Moves: " + movesLeft;
+
+                gameState = "waiting";
+
+                setTimeout(() => {
+                    if (totalScore >= targetScore) {
+                        if (targetDisplay) targetDisplay.innerHTML = "🏆 YOU WIN! 🏆";
+                        alert("Winner! You reached " + totalScore + " points!");
+                        gameState = "gameOver";
+                    } else if (movesLeft <= 0) {
+                        if (targetDisplay) targetDisplay.innerHTML = "❌ GAME OVER ❌";
+                        alert("Game Over! You got " + totalScore + " points. Target was " + targetScore);
+                        gameState = "gameOver";
+                    } else {
+                        resetThrow();
+                    }
+                }, 500);
             }
         }
     }
@@ -105,22 +136,13 @@ function gameplay() {
     }
 
     function gameLoop() {
-        // console.log("gameLoop");
-
         update();
         draw();
-        console.log("gameState:" + gameState);
-        if (gameState === "shoot") {
-            const score = document.querySelector("#score-value");
-            console.log("score 1:" + score(xPos, yPos));
-            score.innerHTML = "Score: " + score(xPos, yPos);
-        }
         requestAnimationFrame(gameLoop);
     }
     gameLoop();
 
     function score(dartx, darty) {
-        // console.log("dartx:" + dartx, "darty:" + darty);
         const dx = dartx - centerX;
         const dy = darty - centerY;
         const scoreboard = [
@@ -144,11 +166,8 @@ function gameplay() {
             angle += 360;
         }
         let slice = Math.floor(angle / 18);
-        // console.log("slice:" + slice)
-        // console.log("angle:" + angle)
-        // console.log("distance:" + distance);
         let base = scoreboard[slice];
-        // console.log("score :" + base)
+
         // triple ring
         if (r > 0.45 && r < 0.5) {
             return base * 3;
@@ -170,12 +189,10 @@ function gameplay() {
         else if (gameState === "aimingY") {
             isLockedY = true;
         }
+        else if (gameState === "gameOver") {
+            location.reload();
+        }
     });
 }
-var target = 300;
-var moves = 10;
-for (let i = 0; i < moves; i++) {
-    document.querySelector("#moves").innerHTML = "Moves: " + moves;
-    gameplay();
-    moves--;
-}
+
+gameplay();
